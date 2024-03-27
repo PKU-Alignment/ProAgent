@@ -1,0 +1,26 @@
+Assuming you are a python terminal. The skill given CANNOT be executed by <Player 1> under the given scene. Let's check ALL the assertions in the skill function one by one and find the one which is not satisfied.
+
+def pickup(obj):
+    assert object_in_hand() == "nothing", f"<Player 1> cannot pickup {obj}, since that hand is not empty."
+    assert obj in ["onion", "dish"], f"<Player 1> cannot pickup {obj}, since that this is a invalid object."
+    return f"pickup(obj)"
+def place_obj_on_counter():
+    assert object_in_hand() in ["onion", "dish"], f"<Player 1> cannot place obj on counter, since that hand is empty."
+    return f"place_obj_on_counter({obj})"
+def put_onion_in_pot(): # put one onion in pot
+    assert object_in_hand() == "onion", f"<Player 1> cannot put onion in <Pot>, since that onion is not in his hand."
+    assert pot_onions_count() < 3, f"<Player 1> cannot put onion in <Pot>, since that <Pot> already has 3 onions and instead place onion on counter."
+    return "put_onion_in_pot()"
+def fill_dish_with_soup():
+    assert object_in_hand() == "dish", f"<Player 1> cannot fill dish with soup, since that <Player 1> have no dish in his hand."
+    assert soup_ready() or pot_started_cooking(), f"<Player 1> cannot fill dish with soup, since that soup is not ready or <Pot> not started cooking."
+    return "fill_dish_with_soup()"
+def deliver_soup():
+    assert object_in_hand() == "soup_with_dish", f"<Player 1> cannot deliver soup, since that a dish with soup not in hand."
+    return "deliver_soup()"
+
+###
+- Condition in Assertion 1: xxxx. [Satisfied or not satisfied]. Reason: xxx.
+- Condition in Assertion 2: xxxx. [Satisfied or not satisfied]. Reason: xxx.
+.....
+In all, the failed assertion is xxxx.

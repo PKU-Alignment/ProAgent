@@ -1,0 +1,75 @@
+Instructions:
+- You are an expert in playing Overcooked, your task is to help Player 0 play the game.
+- Player 0 needs to serve soup. The recipe is three onions. 
+- procedure of making a soup: put three onions in a pot(The pot will only start cooking when there are three onions in it) -> pot start cooking for 20 steps -> pickup_dish -> fill_dish_with_soup -> deliver_soup 
+- Your response will be an analysis of the current scene and the next one legal action Player 0 should take. 
+- After analyzing the scene, output only the legal action for Player 0. 
+
+Facts:
+- Legal actions include:
+    - pickup_onion
+        - Player 0 needs to have nothing in hand.
+        - There must be an onion on the counter.  
+    - put_onion_in_pot
+        - Player 0 needs to have an onion in hand.
+        - There must exists a pot that has less than three onions. 
+    - pickup_dish
+        - Player 0 needs to have nothing in hand.
+        - Need to have a soup ready.  
+        - There must be a dish on the counter. 
+    - place_obj_on_counter
+        - Player 0 needs to have something in hand.
+        - Need to have an empty counter. 
+    - wait(1)
+        - Wait for one step and do nothing. 
+        - When there is nothing on the counter, Player 0 should wait. 
+    - fill_dish_with_soup
+        - Player 0 needs to pickup_dish first or have a dish in hand.
+        - Need to have soup cooking or soup ready in the pot.
+    - deliver_soup  
+        - After Player 0 fill dish with soup, Player 0 must deliver_soup directly. 
+        - Player 0 needs to have soup in hand.
+        - The dish and soup with both disappear. 
+
+- Player 0 can only pickup objects from the counters. 
+- There will be pot and counters in the kitchen.  
+- Notice the recipe, as Player 0 needs to follow the recipe to put the ingredients in the pot. In this case, Player 0 needs to put three onions in the pot to start cooking. 
+- The pot is considered full when there are three onions in it. 
+- When there are three onions in one pot, the pot will cook for 20 timesteps and then become soup ready. 
+- Player 0 should start prepare for the next soup when Player 0 is done with the current one.
+- Player 0 cannot use move actions and don't use the location information in the observation.
+- Player 0 can only hold one thing at a time. To put down the thing Player 0 is holding, Player 0 should use place_obj_on_counter. 
+- If Player 0 not sure what to do, Player 0 can just wait(1). 
+- Based on the current scene, you need to 
+    1. Describe the current scene and analysis it step by step.
+    2. Based on the analysis, tell Player 0 the best plan to perform right now.  When giving plans, you can only choose from seven of the legal actions above. 
+- After giving analysis, plan for Player 0. Format should follow: Plan for Player 0: f"legal_action"     
+- When Player 0 holds a dish with soup, Player 0 should deliver_soup instantly.   
+- Player 0 can prepare for the next soup when there is nothing to do.
+
+Examples: 
+###
+Scene 444: <Player 0> holds nothing.  Kitchen states: <pot 0> is empty; <pot 1> is empty; 3 counters can be visited by <Player 0>. Their states are as follows: No counters has dish. No counters has onion. 
+Analysis: Player 0 need to pickup onion to make recipe. But there is no onion on the counter. So Player 0 should wait.    
+Plan for Player 0: "wait(1)"
+###
+Scene 555: <Player 0> holds a dish with soup and needs to deliver soup.  Kitchen states: <pot 0> is empty; <pot 1> is empty; 3 counters can be visited by <Player 0>. Their states are as follows:  No counters has dish. 1 counters have onion. 
+Analysis: Player 0 holds a dish with soup. Player 0 should deliver_soup instantly. 
+Plan for Player 0: "deliver_soup"   
+###
+Scene 666: <Player 0> holds one dish. Kitchen states: soup in <pot 0> is ready; <pot 1> has 1 onion; 3 counters can be visited by <Player 0>. Their states are as follows:  No counters has dish. No counters has onion. 
+Analysis: The soup is ready. Player 0 has a dish. So Player 0 should fill_dish_with_soup 
+Plan for Player 0: "fill_dish_with_soup"
+### 
+Scene 888: <Player 0> holds nothing. Kitchen states: <pot 1> is empty; soup in <pot 0> is ready; 3 counters can be visited by <Player 0>. Their states are as follows: 1 counters have onion. No counters has dish. 
+Analysis: Player 0 should pickup_dish. But there is no dish on the counter. Instead, there is an onion on the counter. Player 0 can instead pickup_onion and prepare for a recipe to save time. 
+Plan for Player 0: "pickup_onion" 
+### 
+Scene 999: <Player 0> holds one onion. Kitchen states: <pot 1> is empty; <pot 0> has 1 onion; 3 counters can be visited by <Player 0>. Their states are as follows: No counters has dish. No counters has onion. 
+Analysis: Player 0 is holding an onion and <pot 1> and <pot 0> are not full. Player 0 should put_onion_in_pot to prepare for the recipe. 
+Plan for Player 0: "put_onion_in_pot" 
+### 
+Scene 777: <Player 0> holds nothing. Kitchen states: <Pot 1> is empty; <Pot 0> has 2 onions; 3 counters can be visited by <Player 0>. Their states are as follows: No counters have onion. No counters have dish. 
+Analysis: Player 0 should pickup_onion. But there is no onion on the counters. Player 0 should wait. 
+Plan for Player 0: "wait(1)" 
+###

@@ -1,0 +1,79 @@
+Human: Suppose you are an assistant who is proficient in the overcooked_ai game. Your goal is to control Player 0 and cooperate with Player 1 who is controlled by a certain strategy in order to get a high score.
+- Player 0 and Player 1 cannot communicate. 
+- For each step, you will receive the current scene (including the kitchen, teammates status).
+- Based on the current scene, you need to 
+    1. Describe the current scene and analysis it,
+    2. Infer what Player 1 will do, 
+    3. Plan ONLY ONE best skill for Player 0  to do right now. Format should not use natural language, but use the allowed functions.
+
+Instructions:
+- The Overcooked_AI game requires two players to work together as a team with the goal of achieving the highest possible score.
+- To get the points, the team need to make soup according to recipe, fill the soup in a dish and immediately deliver the soup to the service loc. Once a delivery is made, the team gets 20 points. Plus, this soup and dishes will disappear, no need to wash and recycle the dishes.
+
+- To make a soup, the team must pick up three ingredients (usually onions) one by one, put them in a pot. The pot will automatically start cooking when the pot is full (contains 3 ingredients) and it will take 20 time steps to complete the soup.
+- Items (ingredients and dishes) can be obtained from dispensers, which have an unlimited supply. However, each player can only pick up and hold one item at a time.
+- The pot is a stationary unit that cannot be moved, and can ONLY hold three ingredients.
+- After start cooking, the pot needs needs certain cooking timesteps to finish a food. Before the food is finished, players can choose to:
+    - wait (probably not efficient)
+    - Pick up the dish and wait to fill soup in the dish.
+    - Prepare for another cook cycle (especially if there is more than one pot in the environment).
+- Once a ingredient is picked up, it can only be held by the player, placed in the pot (unless the pot is full), or placed on a counter. Similarly, once a dish is picked up, it can either be held by the player, filled with soup, or placed on a counter.
+- One counter can place Only one item.
+
+Skill: 
+In this game, each player can ONLY perform the following 6 allowed skill: pickup, place_obj_on_counter, put_onion_in_pot, fill_dish_with_soup, deliver_soup, wait. Do not attempt to use any other skills that are not listed here.
+def pickup(obj):
+    if object_in_hand() == "nothing": # hand holds nothing
+        if obj in ["onion", "dish"]:
+            pass
+def place_obj_on_counter(obj):
+    if object_in_hand() == "obj":
+        pass
+def put_onion_in_pot(): # put one onion 
+    if object_in_hand() == "onion":
+        if pot_onions_count() < 3:
+            pass
+def fill_dish_with_soup():
+    if object_in_hand() == "dish":
+        if soup_ready() or pot_started_cooking():
+        # It is enough for one condition to be true
+            pass
+def deliver_soup():
+    if object_in_hand("soup"):
+        pass
+def wait(num):  # wait positive num timesteps
+    if type(num) == int and 0 < num <= 20:
+        pass
+
+Here are few examples:
+<example>
+H: Scene 0: Player 0 holds nothing. Player 1 holds nothing. Kitchen states: Pot empty.
+A: Analysis: Pot is empty. Both Player 0 and Player 1 hold nothing and need to start preparing the ingredients. These two players should pickup(onion) and then the pot will has 2 onions.
+Intention for Player 1: "pickup(onion)".
+Plan for Player 0: "pickup(onion)".
+</example>
+H: Scene 81: Player 0 holds nothing. Player 1 holds nothing. Kitchen states: Pot has 1 onion; 
+A: Analysis: The pot has one onion and both players are holding nothing. Player 1 should pick up an onion from the dispenser and put it in the pot to start cooking the soup. Player 0 can wait for the soup to be ready or pick up a dish from the dispenser to prepare for the next cooking cycle.
+Intention for Player 1: "pickup(onion)".
+Plan for Player 0: "wait(20)" or "pickup(dish)".
+</example>
+H: Scene 42: Player 0 holds one onion. Player 1 holds one onion. Kitchen states: Pot has 1 onion and needs more. 
+A: Analysis: The pot has one onions and needs two onions to start cooking the soup. Both Player 0 and Player 1 are holding an onion. Both players should put the onions in the pot and then the pot will has 3 onions and start cooking the soup.
+Intention for Player 1: "put_onion_in_pot()".
+Plan for Player 0: "put_onion_in_pot()".
+</example>
+H: Scene 9: Player 0 holds nothing. Player 1 holds one onion. Kitchen states: Pot has 2 onions and needs one more. 
+A: Analysis: The pot has two onions and needs one more to start cooking the soup. Since Player 1 is holding an onion, it may put it in the pot. Then the pot is full and will start cooking. Player 0 can pick up dish first and wait for the soup to be finished.
+Intention for Player 1: "put_onion_in_pot()".
+Plan for Player 0: "pickup(dish)".
+</example>
+H: Scene 39: Player 0 holds one dish. Player 1 holds one onion. Kitchen states: Pot has already cooked the soup and soup needs to be filled in a dish.  
+A: Analysis: The pot has soup ready. Player 0 holds one dish, and Player 1 holds one onion. Player 0 should fill the dish with soup, and then the pot will be empty and Player 1 can put the onion into the pot.
+Intention for Player 1: "put_onion_in_pot()". 
+Plan for Player 0: "fill_dish_with_soup()".
+</example>
+H: Scene 164: Player 0 holds nothing. Player 1 holds nothing. Kitchen states: Pot makes a soup and soup needs to be filled in a dish. 
+A: Analysis: The pot has made a soup and it needs to be filled in a dish. Both players are holding nothing. One player should pick up a dish from the dispenser, and the other player should pick up an onion from the dispenser to start another cooking cycle.
+Intention for Player 1: "pickup(onion)".
+Plan for Player 0: "pickup(dish)".
+</example>

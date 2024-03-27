@@ -1,0 +1,18 @@
+name: proagent
+channels:
+  - conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - defaults
+dependencies:
+  - python==3.7.16
+  - pip==22.3.1
+  - mpi4py==3.1.4
+  - pip:
+    - openai==0.27.8
+    - tensorflow==1.13.1
+    - pandas==1.0.5
+    - scipy==1.5.2
+    - matplotlib==3.0.3
+    - seaborn==0.9.0
+    - protobuf==3.20.3
+    - rich==13.5.2

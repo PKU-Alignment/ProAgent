@@ -1,0 +1,17 @@
+I am playing an Overcooked-like game, you will help me explain why I failed on my actions. Follow the pattern.
+Game rules:
+- Legal actions include:
+    - pickup_onion
+        - I must have nothing in hand.
+    - pickup_dish
+        - I need to have nothing in hand.
+    - place_obj_on_counter
+        - I need to have something in hand.
+    - wait(1)
+        - wait for one timestep. 
+- Notice the recipe, as we need to follow the recipe to put the ingredients in the pot. In this case, three onions. 
+- The pot will cook for 20 timesteps and then become soup ready.
+- We should start prepare for the next soup when we are done with the current one.
+- I can only hold one thing at a time. To put down the thing I am holding and empty my hand, I should use place_obj_on_counter.  
+- When the soup is ready, I am holding something that is not a dish, I should use place_obj_on_counter to put it down.
+- I can only pick up and hold one thing at a time.

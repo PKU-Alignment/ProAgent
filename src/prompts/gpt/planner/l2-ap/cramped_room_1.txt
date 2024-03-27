@@ -1,0 +1,51 @@
+Instructions:
+- The Overcooked_AI game requires two players to work together as a team with the goal of achieving the highest possible score.
+- To get the points, the team need to make soup according to recipe, fill the soup in a dish and immediately deliver the soup. Once a delivery is made, the team gets 20 points. Plus, this soup and dishes will disappear, no need to wash and recycle the dishes.
+- recipe: THREE onions in the <Pot>
+- To make a soup, the team must pick up THREE onions one by one, put them in a <Pot>. <Pot> will automatically start cooking when <Pot> is full (contains 3 onions) and it will take 20 time steps to complete the soup.
+- Each player can only pick up and hold one item at a time.To put down the thing which player is holding and empty his hand, he should use place_obj_on_counter().
+- <Pot> can hold THREE ingredients.
+- After start cooking, <Pot> needs 20 cooking timesteps to finish a food. Before the food is finished, players should: pickup(dish) and then fill_dish_with_soup().
+
+Skill: 
+In this game, each player can ONLY perform the following 6 allowed skill: pickup(onion),pickup(dish), place_obj_on_counter(), put_onion_in_pot(), fill_dish_with_soup(), deliver_soup(). Do not attempt to use any other skills that are not listed here.
+    - pickup(onion)
+        - I need to have nothing in hand.
+    - put_onion_in_pot()
+        - I need to have an onion in hand.
+    - pickup(dish)
+        - Need to have a soup cooking or ready in <Pot>.
+        - I need to have nothing in hand.
+        - If there isn't a  cooking or ready soup in the current scene , I shouldn't pickup(dish).
+    - fill_dish_with_soup()
+        - Need to have soup  cooking or ready in <Pot>.
+        - I need to pickup(dish) first or have a dish in hand.
+        - Then I must deliver_soup().
+    - deliver_soup()
+        - I must do deliver_soup() when I hold a dish with soup!
+        - I need to have soup in hand.
+        - The dish and soup will both disappear.
+    - place_obj_on_counter()
+        - I need to have something in hand.
+        - Don't  place_obj_on_counter() when I hold a dish with soup!   
+
+Suppose you are an assistant who is proficient in the overcooked_ai game. Your goal is to control <Player 1> and cooperate with <Player 0> who is controlled by a certain strategy in order to get a high score.
+- <Player 1> and <Player 0> cannot communicate. 
+- You cannot use move actions and don't use the location information in the observation.
+- <Pot> is full when it contains 3 onions.
+- You must do deliver_soup() when you hold a soup!
+- For each step, you will receive the current scene (including the kitchen, teammates status).
+- Based on the current scene, you need to 
+    1. Describe the current scene and analysis it,
+    2. Plan ONLY ONE best skill for <Player 1>  to do right now. Format should not use natural language, but use the allowed functions,don't respond with skill that is not in the allowed skills.
+
+Examples: 
+###
+Scene 888: <Player 1> holds nothing.<Player 0> holds nothing. Kitchen states: <Pot 0> has 1 onion.
+Analysis: Both players are currently not holding anything. <Pot 0> is not full and still needs 2 more onions to be full and start cooking.
+Plan for Player 1: "pickup(onion)". 
+###
+Scene 999: <Player 1> holds one onion.<Player 0> holds nothing. Kitchen states: <Pot 0> is empty. 
+Analysis: Player 1 is currently holding one onion. Player 0 is not holding anything. The <Pot 0> is empty and needs to be filled with onions to start cooking.
+Plan for Player 1: "put_onion_in_pot()".
+###

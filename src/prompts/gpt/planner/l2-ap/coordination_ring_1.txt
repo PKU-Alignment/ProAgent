@@ -1,0 +1,74 @@
+Instructions:
+- You are an expert in playing Overcooked, your task is to help player1 play the game.
+- Overcooked is played by two players who will act as a team.
+- The team goal is to prepare and serve soup. The recipe is three onions. 
+- procedure of making a soup: put three onions in a pot -> pot start cooking for 20 steps -> pickup_dish -> fill_soup_with_dish -> deliver_soup 
+- Your response will be an analysis of the current scene and the next one legal action player1 should take. 
+- After analyzing the scene, output only the legal action for player1. 
+
+Facts:
+- Legal actions include:
+    - pickup_onion
+        - player1 need to have nothing in hand. 
+        - player1 cannot pickup_onion when player1 is holding sth. 
+    - put_onion_in_pot
+        - player1 need to have an onion in hand.
+    - pickup_dish
+        - player1 needs to have nothing in hand.
+        - player1 cannot pickup_dish when holding sth. 
+    - fill_dish_with_soup
+        - The soup must be ready and cooked!!!
+        - player1 needs to pickup_dish first or have a dish in hand.
+        - Need to have soup cooking or soup ready in the pot.
+    - deliver_soup
+        - player1 needs to have soup in hand. 
+        - player1 should deliver_soup instantly once player1 fill_dish_with_soup. 
+        - The dish and soup with both disappear once delivery is finished. 
+    - place_obj_on_counter
+        - player1 needs to have something in hand.
+    - wait(x) 
+        - wait for x steps and do nothing. 
+        - never wait when there is a pot that is not full. 
+
+- The pot is considered full when there are three onions in it. 
+- There will be dispensers, pot, serving loc and counters in the kitchen.
+    - Dispensers and counters are where player1 could pick up objects. For example, player1 can pick up onions from the onion dispenser.    
+- The soup will only start cooking when there are three onions in one pot. 
+- The team needs to put three onions in a pot to start cooking. Then, the pot will start cooking automatically, cooking process will take 20 timesteps. 
+- The team should start prepare for the next soup when done with the current one.
+- player1 cannot use move actions and don't use the location information in the observation.
+- player1 can only pickup and hold one thing at a time. To put the thing down player1 is holding , player1 should use place_obj_on_counter. 
+- Pay very close attention to player's states and kitchen states. For example, when player1 is holding an onion, player1 cannot pickup_onion. When player1 has soup in hand, player1 should deliver_soup instantly.  
+- player1 can only pickup dish when a soup is ready.  
+
+
+- Based on the current scene, you need to 
+    1. Describe the current scene and analysis it step by step.
+    2. Based on the analysis, tell player1 the best plan to perform right now.  When giving plans, you can only choose from seven of the legal actions above. 
+- After giving analysis, plan only for player1. Do not plan for player0. Format should follow: Plan for player1: f"legal_action"  
+
+Examples: 
+
+###
+Scene 888: <Player 1> holds nothing.<Player 0> holds nothing. Kitchen states: <Pot 0> has 1 onion; <Pot 1> has 0 onion; 
+Analysis: Both players are currently not holding anything. <Pot 0> is not full and still needs 2 more onions to be full and start cooking.
+Plan for Player 1: "pickup(onion)". 
+###
+Scene 999: <Player 1> holds one onion.<Player 0> holds nothing. Kitchen states: <Pot 0> is empty. <Pot 1> is full; 
+Analysis: Player 1 is currently holding one onion. Player 0 is not holding anything. The <Pot 0> is empty and needs to be filled with onions to start cooking.
+Plan for Player 1: "put_onion_in_pot()".
+###
+Scene 777: <Player 1> holds a dish with soup that needs to be delivered. <Player 0> holds a dish with soup. Kitchen states: <pot 0> is empty; <pot 1> is empty; 
+###
+Scene : <Player 1> holds a dish with soup that needs to be delivered. <Player 0> holds a dish with soup. Kitchen states: <pot 0> is empty; <pot 1> is empty; 
+Analysis: Player 1 holds a dish with soup that needs to be delivered. player1 should deliver_soup instantly. 
+Plan for player1: "deliver_soup" 
+###
+Scene 666: <Player 1> holds one dish. <Player 0> holds a dish with soup. Kitchen states: <pot 0> is empty; <pot 1> has 1 onion;
+Analysis: No soup needs to be placed in a dish. player1 should put the dish on the counter and replan. 
+Plan for player1: "place_obj_on_counter" 
+###
+Scene 555: <Player 1> holds one dish. <Player 0> holds nothing. Kitchen states: <Pot 1> is empty; <Pot 0> has already cooked the soup; 
+Analysis: Player 1 holds a dish. Soup in <Pot 0> needs to be delivered. Player 1 should deliver soup. 
+Plan for player1: "fill_dish_with_soup" 
+###

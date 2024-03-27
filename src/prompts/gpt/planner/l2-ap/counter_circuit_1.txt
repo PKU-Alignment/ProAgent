@@ -1,0 +1,128 @@
+Instructions:
+- The Overcooked_AI game requires two players to work together as a team with the goal of achieving the highest possible score.
+- To get the points, the team need to make soup according to recipe, fill the soup in a dish and immediately deliver the soup. Once a delivery is made, the team gets 20 points. Plus, this soup and dishes will disappear, no need to wash and recycle the dishes.
+- recipe: THREE onions in the <Pot>
+- To make a soup, the team must pick up THREE onions one by one, put them in a <Pot>. <Pot> will automatically start cooking when <Pot> is full (contains 3 onions) and it will take 20 time steps to complete the soup.
+- Each player can only pick up and hold one item at a time.To put down the thing which player is holding and empty his hand, he should use place_obj_on_counter().
+- <Pot> can hold THREE ingredients.
+- After start cooking, <Pot> needs 20 cooking timesteps to finish a food. Before the food is finished, players should:
+	- If all pots are cooking or ready, Pick up a dish and then fill dish with soup.
+	- If there is a pot not full in the environment, Prepare for another cook cycle.
+Skill: 
+In this game, each player can ONLY perform the following 6 allowed skill: pickup(onion),pickup(dish), place_obj_on_counter(), put_onion_in_pot(), fill_dish_with_soup(), deliver_soup(). Do not attempt to use any other skills that are not listed here.
+    - pickup(onion)
+        - I need to have nothing in hand.
+    - put_onion_in_pot()
+        - I need to have an onion in hand.
+    - pickup(dish)
+        - Need to have a soup ready in <Pot>.
+        - I need to have nothing in hand.
+        - If there isn't a  ready soup in the current scene , I shouldn't pickup(dish).
+    - fill_dish_with_soup()
+        - Need to have soup ready in <Pot>.
+        - I need to pickup(dish) first or have a dish in hand.
+        - Then I must deliver_soup().
+    - deliver_soup()
+        - I must do deliver_soup() when I hold a dish with soup!
+        - I need to have soup in hand.
+        - The dish and soup will both disappear.
+    - place_obj_on_counter()
+        - I need to have something in hand.
+        - Don't  place_obj_on_counter() when I hold a dish with soup!
+
+
+Suppose you are an assistant who is proficient in the overcooked_ai game. Your goal is to control <Player 1> and cooperate with <Player 0> who is controlled by a certain strategy in order to get a high score.
+- <Player 1> and <Player 0> cannot communicate. 
+- You cannot use move actions and don't use the location information in the observation.
+- You cannot wait. 
+- <Pot> is full when it contains 3 onions.
+- You must do deliver_soup() when you hold a soup!
+- For each step, you will receive the current scene (including the kitchen, teammates status).
+- Based on the current scene, you need to 
+    1. Describe the current scene and analysis it,
+    2. Plan ONLY ONE best skill for <Player 1>  to do right now. Format should not use natural language, but use the allowed functions,,don't respond with skill that is not in the allowed skills.
+
+-Your response should be in the following format:
+Analysis:[your analysis of the current scene]
+Plan for Player 1: [one action in [pickup(onion),put_onion_in_pot(),pickup(dish),fill_dish_with_soup(),deliver_soup(),place_obj_on_counter()]]
+Examples: 
+###
+Scene 999: <Player 1> holds one onion.<Player 0> holds nothing. Kitchen states: <Pot 0> is empty; <Pot 1> has 1 onion. 
+
+Analysis: <Pot 0> and <Pot 1> are not full. <Player 1> holds one onion, he should put the onion in pot.     
+Plan for Player 1: put_onion_in_pot() 
+### 
+Scene 888: <Player 1> holds nothing.<Player 0> holds nothing. Kitchen states: <Pot 0> has 1 onion; <Pot 1> has 1 onion.
+
+Analysis: <Pot 0> and <Pot 1> are not full. <Player 1> holds nothing , he should pickup an onion in order to cook. 
+Plan for Player 1: pickup(onion)
+###
+Scene 34: <Player 1> holds nothing. <Player 0> holds one onion. Kitchen states: <Pot 1> is empty; <Pot 0> has 2 onions.
+
+Analysis: <Pot 0> and <Pot 1> are not full. <Player 1> holds nothing , he should pickup an onion in order to cook. 
+Plan for Player 1: pickup(onion)
+### 
+Scene 777: <Player 1> holds nothing. <Player 0> holds one onion. Kitchen states: soup in <Pot 0> is ready; soup in <Pot 1> is cooking, it will be ready after 19 timesteps.
+
+Analysis:All pots are cooking or ready, <Player 1> holds nothing ,so he should pick up a dish to fill the soup in dish.
+Plan for Player 1: pickup(dish)
+###
+Scene 1000: <Player 1> holds one onion. <Player 0> holds nothing. Kitchen states: <Pot 1> is empty; <Pot 0> has 1 onion.
+
+Analysis: <Player 1> is holding one onion. <Pot 0> and <Pot 1> are not full. <Player 1> should put the onion in the pot. 
+Plan for Player 1: put_onion_in_pot()  
+###
+Scene 121: <Player 1> holds a dish with soup. <Player 0> holds one onion. Kitchen states: <Pot 1> is empty; soup in <Pot 0> is ready.
+
+Analysis: <Player 1> is holding a dish with soup. So <Player 1> must deliver soup right now.  And <Player 1> shouldn't do place_obj_on_counter()! 
+Plan for Player 1: deliver_soup()
+###
+Scene 173: <Player 1> holds a dish with soup. <Player 0> holds one dish. Kitchen states: <Pot 0> is empty; <Pot 1> has 1 onion.
+
+Analysis: <Player 1> is holding a dish with soup. So <Player 1> must deliver soup right now.  And <Player 1> shouldn't do place_obj_on_counter()! 
+Plan for Player 1: deliver_soup()
+###
+Scene 131: <Player 1> holds one onion. <Player 0> holds one dish. Kitchen states: <Pot 0> is empty.
+
+Analysis: <Player 1> is holding one onion. <Pot 0> is not full. <Player 1> should put the onion in the pot. 
+Plan for Player 1: put_onion_in_pot()  
+###
+Scene 38: <Player 1> holds nothing. <Player 0> holds a dish with soup. Kitchen states: <Pot 0> is empty.
+
+Analysis: <Pot 0> is not full. <Player 1> should pickup an onion and put it in pot. 
+Plan for Player 1: pickup(onion)
+###
+Scene 13: <Player 1> holds nothing. <Player 0> holds nothing. Kitchen states: soup in <Pot 0> is cooking, it will be ready after 19 timesteps.
+
+Analysis: <Pot 0> is cooking. <Player 1> should pickup a dish in order to prepare fill dish with soup. 
+Plan for Player 1: pickup(dish)
+###
+Scene 15: <Player 1> holds one dish. <Player 0> holds one onion. Kitchen states: soup in <Pot 0> is cooking, it will be ready after 16 timesteps; 
+
+Analysis: <Pot 0> is cooking. <Player 1> holds one dish , he should fill dish with soup.
+Plan for Player 1: fill_dish_with_soup()
+###
+Scene 121: <Player 1> holds a dish with soup. <Player 0> holds one onion. Kitchen states: <Pot 1> is empty; soup in <Pot 0> is ready.
+
+Analysis: <Player 1> is holding a dish with soup. So <Player 1> must deliver soup right now.  And <Player 1> shouldn't do place_obj_on_counter()! 
+Plan for Player 1: deliver_soup()
+###
+Scene 173: <Player 1> holds a dish with soup. <Player 0> holds one dish. Kitchen states: <Pot 0> is empty; <Pot 1> has 1 onion.
+
+Analysis: <Player 1> is holding a dish with soup. So <Player 1> must deliver soup right now.  And <Player 1> shouldn't do place_obj_on_counter()! 
+Plan for Player 1: deliver_soup()
+###
+Scene 106: <Player 1> holds nothing. <Player 0> holds nothing. Kitchen states: <Pot 0> is empty; soup in <Pot 1> is cooking, it will be ready after 2 timesteps.
+
+Analysis: Soup in <Pot 1> is still under cooking and is not ready , <Pot 0> is empty , <Player 1> holds nothing ,so he should pickip(onion) to prepare for cooking in <Pot 0> when <Pot 1> is cooking.
+Plan for Player 1: pickup(onion)
+###
+Scene 312: <Player 1> holds one onion. <Player 0> holds one onion. Kitchen states: <Pot 0> has 2 onions; <Pot 1> has 2 onions; 
+
+Analysis: Both pots have 2 onions and <Pot> can hold 3 ingredients so they are not full ,<Player 1> holds one onion, he should put_onion_in_pot().
+Plan for Player 0: put_onion_in_pot()
+###
+Scene 91: <Player 1> holds nothing. <Player 0> holds nothing. Kitchen states: soup in <pot 0> is cooking, it will be ready after 8 timesteps; soup in <pot 1> is cooking, it will be ready after 19 timesteps; 
+
+Analysis: All pots are cooking. <Player 1> should pickup a dish in order to prepare fill dish with soup. 
+Plan for Player 0: pickup(dish)
