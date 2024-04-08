@@ -75,6 +75,11 @@ It is useful to setup a conda environment with Python 3.7 (python3.8 not support
 
 ### Prompts level 
 
+- `l1-p`: make plans directly without CoT 
+- `l2-ap`: plans with analysis 
+- `l3-aip`: plans with analysis and intention
+
+
 ### Memory length
 We now support retrival recent K dialogs and use BERT+cos to retrival top K similarity dialogs
 ```
@@ -84,6 +89,10 @@ python main.py --layout cramped_room --p0 ProAgent --p1 Greedy --retrival_method
 # with recent 10 dialogs in the query
 python main.py --layout cramped_room --p0 ProAgent --p1 Greedy --retrival_method recent_k --K 10
 ```
+
+> Notes: Our full experiments (5 baselines, 5 layouts) are based on `--gpt_model gpt-3.5-turbo-0301 --prompt_level l2-ap --retrival_method recent_k --K 0or1`. 
+We did an ablation study on the impact of choosing different prompts based on `crampt room` layout.
+we also use the different LLMs on five layouts only cooperate with Greedy method.
 
 ## ToDoList
 - []  human interaction
