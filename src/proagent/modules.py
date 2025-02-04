@@ -23,7 +23,7 @@ class Module(object):
     """
     def __init__(self, 
                  role_messages, 
-                 model="gpt-3.5-turbo-0301",
+                 model="gpt-3.5-turbo",
                  retrival_method="recent_k",
                  K=3):
         '''

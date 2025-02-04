@@ -28,7 +28,7 @@ class ProAgent(object):
         """
         This agent uses GPT-3.5 to generate actions.
         """
-        def __init__(self, model="gpt-3.5-turbo-0301"):
+        def __init__(self, model="gpt-3.5-turbo"):
                 self.agent_index = None
                 self.model = model
 
@@ -41,6 +41,7 @@ class ProAgent(object):
                 with open(openai_key_file, "r") as f:
                         context = f.read()
                 self.openai_api_keys = context.split('\n')
+                print(self.openai_api_keys)
 
         def openai_api_key(self):
                 if self.key_rotation:
@@ -68,7 +69,7 @@ class ProMediumLevelAgent(ProAgent):
                         self,
                         mlam,
                         layout,
-                        model='gpt-3.5-turbo-0301',
+                        model='gpt-3.5-turbo',
                         prompt_level='l2-ap', # ['l1-p', 'l2-ap', 'l3-aip']
                         belief_revision=False,
                         retrival_method="recent_k",

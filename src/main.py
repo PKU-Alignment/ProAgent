@@ -182,7 +182,7 @@ if __name__ == '__main__':
     parser.add_argument('--episode', type=int, default=1, help='Number of episodes')
 
     # these parsers are only required when using ProAgent.
-    parser.add_argument('--gpt_model', type=str, default='gpt-3.5-turbo-0301', choices=['text-davinci-003', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-0301', 'gpt-3.5-turbo', 'gpt-4', 'gpt-4-0314'], help='Number of episodes')
+    parser.add_argument('--gpt_model', type=str, default='gpt-3.5-turbo', choices=['text-davinci-003', 'gpt-3.5-turbo-16k', 'gpt-3.5-turbo-0301', 'gpt-3.5-turbo', 'gpt-4', 'gpt-4-0314'], help='Number of episodes')
     parser.add_argument('--prompt_level', '-pl', type=str, default='l2-ap', choices=['l1-p', 'l2-ap', 'l3-aip'], help="'l1-p': make plans directly without CoT; 'l2-ap': plans with analysis; 'l3-aip': plans with analysis and intention.")
     parser.add_argument('--belief_revision', '-br', type=boolean_argument, default=False, help='whether we use belief_revision or not')
     parser.add_argument('--retrival_method', type=str, default="recent_k", choices=['recent_k', 'bert_topk'], help='Use similarity-based(BERT, CLIP) retrieval or retrieve recent K history in dialog.')
