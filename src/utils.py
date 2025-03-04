@@ -76,7 +76,7 @@ def make_agent(alg:str, mdp, layout, **gptargs):
 
     elif alg in ['COLE', 'FCP', 'MEP', 'PBT', 'SP']:
         old_layout = OLD_LAYOUTS[layout]
-        agent_path = f"model/{old_layout}/{alg}"
+        agent_path = f"models/{old_layout}/{alg}"
         config = load_dict_from_file(agent_path + "/params.txt")
         agent = get_agent_from_saved_model(agent_path, config["sim_threads"])
 

@@ -94,9 +94,6 @@ python main.py --layout cramped_room --p0 ProAgent --p1 Greedy --retrival_method
 We did an ablation study on the impact of choosing different prompts based on `crampt room` layout.
 we also use the different LLMs on five layouts only cooperate with Greedy method.
 
-## ToDoList
-- []  human interaction
-
 
 ## Q&A 
 
@@ -121,21 +118,13 @@ from your browser and are prompted for a username and password.
 ## Citation
 
 ```bibtex
-@inproceedings{li2023cooperative,
-  title={Cooperative Open-Ended Learning Framework for Zero-Shot Coordination},
-  author={Li, Yang and Zhang, Shao and Sun, Jichen and Du, Yali and Wen, Ying and Wang, Xinbing and Pan, Wei},
-  booktitle={International conference on machine learning},
-  pages={},
-  year={2023},
-  organization={PMLR}
-}
-
-@inproceedings{carroll2019utility,
- title={On the Utility of Learning About Humans for Human-AI Coordination},
- author={Carroll, Micah and Shah, Rohin and Ho, Mark K and Griffiths, Tom and Seshia, Sanjit and Abbeel, Pieter and Dragan, Anca},
- booktitle={Advances in Neural Information Processing Systems},
- pages={},
- volume={32},
- year={2019},
+@inproceedings{zhang2024proagent,
+  title={Pro{A}gent: Building Proactive Cooperative Agents with Large Language Models},
+  author={Zhang, Ceyao and Yang, Kaijie and Hu, Siyi and Wang, Zihao and Li, Guanghe and Sun, Yihang and Zhang, Cheng and Zhang, Zhaowei and Liu, Anji and Zhu, Song-Chun and Chang, Xiaojun and Zhang, Junge and Yin, Feng and Liang, Yitao  and Yang, Yaodong},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={38},
+  number={16},
+  pages={17591--17599},
+  year={2024}
 }
 ```
